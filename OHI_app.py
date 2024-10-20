@@ -22,7 +22,7 @@ view detailed resumes, and gain insights into the historical context of these in
 
 # Section 2: Name selection and introduction
 st.header("Select a Historical Figure")
-selected_name = st.selectbox("Choose a name:", dt['مصاحبه شونده (الفبایی)'])
+selected_name = st.selectbox("Choose a name:", dt['IntervieweeName'])
 if selected_name:
-    person_info = dt[dt['مصاحبه شونده (الفبایی)'] == selected_name].iloc[0]
-    st.write(f"resume: {person_info['سوابق']}")
+    person_info = dt[dt['IntervieweeName'] == selected_name].iloc[0]
+    st.write(f"معرفی: {person_info['Intro']}")
