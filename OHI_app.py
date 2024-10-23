@@ -29,11 +29,11 @@ if selected_name:
 
  # Section 3: Tabs for graphs/tables
 st.header("Data Visualization")
-tabs = st.tabs(["gender ratio", "country of education", "Profession Analysis"])
+tabs = st.tabs(["University Background", "Political Party", "Profession Analysis"])
 
 with tabs[0]:
     # Bar Chart for Experience Overview
-    st.subheader("Experience Overview")
+    st.subheader("University Background")
     country_counts = dt['University'].value_counts()
     plt.figure(figsize=(10, 6))
     sns.barplot(x=country_counts.index, y=country_counts.values, palette='viridis')
@@ -42,14 +42,36 @@ with tabs[0]:
     plt.ylabel("Count")
     plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
     plt.tight_layout()  # Adjust layout to prevent clipping of tick-labels
-    plt.show()
-
+    st.pyplot(plt)
+    
 with tabs[1]:
     # Pie Chart for Field Distribution
-    st.subheader("Field Distribution")
+    st.subheader("Political Party")
+    party_counts = dt['Party'].value_counts()
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=party_counts.index, y=party_counts.values, palette='flare')
+    plt.title("Number of Occurrences for Each Party")
+    plt.xlabel("Party")
+    plt.ylabel("Count")
+    plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+    plt.tight_layout()  # Adjust layout to prevent clipping of tick-labels
+    st.pyplot(plt)
 
 
 with tabs[2]:
     # Table of Professions
     st.subheader("Profession Analysis")
- 
+    
+    c1 = dt['IsShahGov'].sum()
+    c2 = dt['IsShahOpp'].sum()
+
+#   Data for pie chart
+    labels = ['had post under Shah', 'had post after Revolution']
+    sizes = ['c1', 'c2']
+    
+    # Create a pie chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#ff9999','#66b3ff'])
+    plt.title("Ratio of the poeple having Post before & after Revolution")
+    plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
+    plt.show()
