@@ -4,12 +4,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 #data loading
-dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH.csv')
-#dt.head()
-#dt.fillna(0)
-#print(dt)
+dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-1.csv')
 
-
+#App
 st.title("Historical People Data Dashboard")
 
 # Section 1: About the Project
@@ -62,16 +59,16 @@ with tabs[2]:
     # Table of Professions
     st.subheader("Profession Analysis")
     
-    c1 = dt['IsShahGov'].sum()
-    c2 = dt['IsShahOpp'].sum()
+    ShahGov_count = dt['IsShahGov'].sum()
+    ShahOpp_count = dt['IsShahOpp'].sum()
 
 #   Data for pie chart
-    labels = ['had post under Shah', 'had post after Revolution']
-    sizes = ['c1', 'c2']
+    labels = ['Pro-Shah', 'Anti-Shah']
+    sizes = [ShahGov_count, ShahOpp_count]
     
     # Create a pie chart
     plt.figure(figsize=(8, 8))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#ff9999','#66b3ff'])
-    plt.title("Ratio of the poeple having Post before & after Revolution")
+    plt.title("Ratio of the Pro-Shah & Anti-Shah interviewees")
     plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
-    plt.show()
+    st.pyplot(plt)
