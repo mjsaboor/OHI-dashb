@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 #data loading
 dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-2.csv')
@@ -62,6 +63,7 @@ with tabs[1]:
 with tabs[2]:
     # Pie Chart for Field Distribution
     st.subheader("Political Party")
+    #dt['Party'].replace(0, np.nan, inplace=True)
     party_counts = dt['Party'].value_counts()
     plt.figure(figsize=(10, 6))
     sns.barplot(x=party_counts.index, y=party_counts.values, palette='flare')
