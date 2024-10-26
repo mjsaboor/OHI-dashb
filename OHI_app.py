@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 #data loading
-dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-1.csv')
+dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-2.csv')
 
 #App
 st.title("Historical People Data Dashboard")
@@ -22,13 +22,31 @@ st.header("Select a Historical Figure")
 selected_name = st.selectbox("Choose a name:", dt['IntervieweeName'])
 if selected_name:
     person_info = dt[dt['IntervieweeName'] == selected_name].iloc[0]
-    st.write(f"معرفی: {person_info['Intro  ']}")
+    st.write(f"معرفی: {person_info['Intro']}")
 
  # Section 3: Tabs for graphs/tables
 st.header("Data Visualization")
-tabs = st.tabs(["University Background", "Political Party", "Profession Analysis"])
+tabs = st.tabs(["Gender Ratio", "University Background", "Political Party", "Political Orientation", "Political career"])
 
 with tabs[0]:
+    # Table of Professions
+    st.subheader("Gender Ratio")
+    st.markdown("چند درصد مصاحبه شدگان زن یا مرد هستند؟")
+    female_count = dt['female'].sum()
+    male_count = len(dt['female']) - dt['female'].sum()
+
+#   Data for pie chart
+    labels = ['Female', 'Male']
+    sizes = [female_count, male_count]
+    
+    # Create a pie chart
+    plt.figure(figsize=(6, 6))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#097969','#D70040'])
+    plt.title("Gender ratio of interviewees")
+    plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
+    st.pyplot(plt)
+
+with tabs[1]:
     # Bar Chart for Experience Overview
     st.subheader("University Background")
     country_counts = dt['University'].value_counts()
@@ -41,7 +59,7 @@ with tabs[0]:
     plt.tight_layout()  # Adjust layout to prevent clipping of tick-labels
     st.pyplot(plt)
     
-with tabs[1]:
+with tabs[2]:
     # Pie Chart for Field Distribution
     st.subheader("Political Party")
     party_counts = dt['Party'].value_counts()
@@ -55,9 +73,9 @@ with tabs[1]:
     st.pyplot(plt)
 
 
-with tabs[2]:
+with tabs[3]:
     # Table of Professions
-    st.subheader("Profession Analysis")
+    st.subheader("Political Orientation")
     
     ShahGov_count = dt['IsShahGov'].sum()
     ShahOpp_count = dt['IsShahOpp'].sum()
@@ -70,5 +88,23 @@ with tabs[2]:
     plt.figure(figsize=(8, 8))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#ff9999','#66b3ff'])
     plt.title("Ratio of the Pro-Shah & Anti-Shah interviewees")
+    plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
+    st.pyplot(plt)
+
+with tabs[4]:
+    # Table of Professions
+    st.subheader("Political career")
+    st.markdown("چه نسبتی از مصاحبه شدگان پیش و پس از انقلاب مسئولیت کاری داشته اند؟")
+    PreRev_count = dt['PreRevolution'].sum()
+    PosRev_count = dt['PostRevolution'].sum()
+
+#   Data for pie chart
+    labels = ['holding position before revolution', 'holding position after revolution']
+    sizes = [PreRev_count, PosRev_count]
+    
+    # Create a pie chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#C1E1C1','#2E8B57'])
+    plt.title("Ratio of interviewees holding position before/after revolution")
     plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
     st.pyplot(plt)
