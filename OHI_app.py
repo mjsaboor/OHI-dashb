@@ -27,7 +27,7 @@ if selected_name:
 
  # Section 3: Tabs for graphs/tables
 st.header("Data Visualization")
-tabs = st.tabs(["Gender Ratio", "University Background", "Political Party", "Political Orientation", "Political career"])
+tabs = st.tabs(["Gender Ratio", "University Background", "Political Party", "Political Orientation", "Political career", "Position"])
 
 with tabs[0]:
     # Table of Professions
@@ -50,6 +50,7 @@ with tabs[0]:
 with tabs[1]:
     # Bar Chart for Experience Overview
     st.subheader("University Background")
+    st.markdown("مصاحبه شدگان در چه کشورهایی تحصیل کرده اند؟")
     country_counts = dt['University'].value_counts()
     plt.figure(figsize=(10, 6))
     sns.barplot(x=country_counts.index, y=country_counts.values, palette='viridis')
@@ -78,7 +79,7 @@ with tabs[2]:
 with tabs[3]:
     # Table of Professions
     st.subheader("Political Orientation")
-    
+    st.markdown("چه نسبتی از مصاحبه شدگان از طرفداران یا مخالفان شاه بوده اند؟")
     ShahGov_count = dt['IsShahGov'].sum()
     ShahOpp_count = dt['IsShahOpp'].sum()
 
@@ -109,4 +110,17 @@ with tabs[4]:
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#C1E1C1','#2E8B57'])
     plt.title("Ratio of interviewees holding position before/after revolution")
     plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
+    st.pyplot(plt)
+
+with tabs[5]:
+    counts = dt[['Palement', 'Minister', 'Bussiness','ForeignAffairs','BankEco','Diplomat','Military','Press', 'Lawyer']].sum()
+    new_labels = ['Parlement Member', 'Minister', 'Business', 'Foreign Affairs minister', 'Banking & Economy', 'Diplomat', 'Military', 'Press' ,'Lawyer']
+# Plotting the results
+    plt.figure(figsize=(8, 6))
+    sns.barplot(x=new_labels, y=counts.values, palette="rocket")
+    plt.xlabel("Category")
+    plt.ylabel("Number of individuals")
+    plt.ylim(0, dt.shape[0])  # Adjust y-limit based on total number of rows
+    plt.title("Sum of Values by Category")
+    plt.xticks(rotation='vertical')
     st.pyplot(plt)
