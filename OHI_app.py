@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+from bidi.algorithm import get_display
+from arabic_reshaper import reshape
 
 #data loading
 dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-2.csv')
@@ -65,9 +67,13 @@ with tabs[2]:
     # Pie Chart for Field Distribution
     st.subheader("Political Party")
     #dt['Party'].replace(0, np.nan, inplace=True)
+    labels = ['جبهه ملی', 'رستاخیز', 'نیروی سوم', 'حزب مردم', 'توده',
+       'حزب پیکار', 'زحمتکشان', 'پان ایرانیسم', 'ایران نوین', 'مجاهدین خلق',
+       'فدائیان خلق', 'نهضت آزادی', '0']
+    new_labels = [get_display(reshape(label)) for label in labels]
     party_counts = dt['Party'].value_counts()
     plt.figure(figsize=(10, 6))
-    sns.barplot(x=party_counts.index, y=party_counts.values, palette='flare')
+    sns.barplot(x=new_labels, y=party_counts.values, palette='flare')
     plt.title("Number of Occurrences for Each Party")
     plt.xlabel("Party")
     plt.ylabel("Count")
@@ -84,12 +90,13 @@ with tabs[3]:
     ShahOpp_count = dt['IsShahOpp'].sum()
 
 #   Data for pie chart
-    labels = ['Pro-Shah', 'Anti-Shah']
+    labels = ['موافقان شاه', 'مخالفان شاه']
+    persian_labels = [get_display(reshape(label)) for label in labels]
     sizes = [ShahGov_count, ShahOpp_count]
     
     # Create a pie chart
     plt.figure(figsize=(8, 8))
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#ff9999','#66b3ff'])
+    plt.pie(sizes, labels=persian_labels, autopct='%1.1f%%', startangle=90, colors=['#ff9999','#66b3ff'])
     plt.title("Ratio of the Pro-Shah & Anti-Shah interviewees")
     plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
     st.pyplot(plt)
@@ -114,7 +121,9 @@ with tabs[4]:
 
 with tabs[5]:
     counts = dt[['Palement', 'Minister', 'Bussiness','ForeignAffairs','BankEco','Diplomat','Military','Press', 'Lawyer']].sum()
-    new_labels = ['Parlement Member', 'Minister', 'Business', 'Foreign Affairs minister', 'Banking & Economy', 'Diplomat', 'Military', 'Press' ,'Lawyer']
+    labels = ['نماینده مجلس', 'وزیر', 'بازرگانان', 'وزیر امورخارجه', 'سازمان برنامه و بانک مرکزی', 'دیپلمات', 'نظامی', 'مطبوعات' ,'حقوقدان']
+    new_labels = [get_display(reshape(label)) for label in labels]
+
 # Plotting the results
     plt.figure(figsize=(8, 6))
     sns.barplot(x=new_labels, y=counts.values, palette="rocket")
