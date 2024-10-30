@@ -7,7 +7,7 @@ from bidi.algorithm import get_display
 from arabic_reshaper import reshape
 
 #data loading
-dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-2.csv')
+dt = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-3.csv')
 
 #App
 st.title("Historical People Data Dashboard")
@@ -29,7 +29,7 @@ if selected_name:
 
  # Section 3: Tabs for graphs/tables
 st.header("Data Visualization")
-tabs = st.tabs(["Gender Ratio", "University Background", "Political Party", "Political Orientation", "Political career", "Position"])
+tabs = st.tabs(["Gender Ratio", "وضعیت سن مصاحبه شدگان", "University Background", "Political Party", "Political Orientation", "Political career", "Position"])
 
 with tabs[0]:
     # Table of Professions
@@ -50,6 +50,41 @@ with tabs[0]:
     st.pyplot(plt)
 
 with tabs[1]:
+    st.subheader("وضعیت سن مصاحبه شدگان")
+    specific_age = 60
+
+    # Set up the histogram
+    plt.figure(figsize=(10, 6))
+    plt.hist(dt['Age'], bins=10, alpha=0.7, color='skyblue', edgecolor='black')
+    
+    # Add a vertical line for the specific age
+    plt.axvline(x=specific_age, color='red', linestyle='dashed', linewidth=2)
+    
+    # Add text label for the specific age line
+    plt.text(specific_age + 1, 5, f'Age = {specific_age}', color='red')
+    
+    # Title and labels
+    plt.title(get_display(reshape("توزیع سن مصاحبه شدگان در زمان انجام مصاحبه")))
+    plt.xlabel(get_display(reshape("سن")))
+    plt.ylabel(get_display(reshape("تعداد مصاحبه شدگان")))
+    plt.grid(axis='y', alpha=0.75)
+    st.pyplot(plt)
+
+    dt['Group'] = dt.apply(lambda x: 'Pro-shah' if x['IsShahGov'] == 1 else 'Anti-shah', axis=1)
+
+    # Set the style of the plot
+    sns.set(style="whitegrid")
+
+    # Create the box plot
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(x='Group', y='Age', data=dt, palette={'Pro-shah': '#4361EE', 'Anti-shah': '#F72585'})
+
+    # Add titles and labels
+    plt.title('Age Distribution by Group')
+    plt.xlabel('Group')
+    plt.ylabel('Age')
+
+with tabs[2]:
     # Bar Chart for Experience Overview
     st.subheader("University Background")
     st.markdown("مصاحبه شدگان در چه کشورهایی تحصیل کرده اند؟")
@@ -63,7 +98,7 @@ with tabs[1]:
     plt.tight_layout()  # Adjust layout to prevent clipping of tick-labels
     st.pyplot(plt)
     
-with tabs[2]:
+with tabs[3]:
     # Pie Chart for Field Distribution
     st.subheader("Political Party")
     #dt['Party'].replace(0, np.nan, inplace=True)
@@ -82,7 +117,7 @@ with tabs[2]:
     st.pyplot(plt)
 
 
-with tabs[3]:
+with tabs[4]:
     # Table of Professions
     st.subheader("Political Orientation")
     st.markdown("چه نسبتی از مصاحبه شدگان از طرفداران یا مخالفان شاه بوده اند؟")
@@ -101,7 +136,7 @@ with tabs[3]:
     plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
     st.pyplot(plt)
 
-with tabs[4]:
+with tabs[5]:
     # Table of Professions
     st.subheader("Political career")
     st.markdown("چه نسبتی از مصاحبه شدگان پیش و پس از انقلاب مسئولیت کاری داشته اند؟")
@@ -119,7 +154,7 @@ with tabs[4]:
     plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
     st.pyplot(plt)
 
-with tabs[5]:
+with tabs[6]:
     counts = dt[['Palement', 'Minister', 'Bussiness','ForeignAffairs','BankEco','Diplomat','Military','Press', 'Lawyer']].sum()
     labels = ['نماینده مجلس', 'وزیر', 'بازرگانان', 'وزیر امورخارجه', 'سازمان برنامه و بانک مرکزی', 'دیپلمات', 'نظامی', 'مطبوعات' ,'حقوقدان']
     new_labels = [get_display(reshape(label)) for label in labels]
