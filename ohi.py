@@ -9,6 +9,8 @@ from arabic_reshaper import reshape
 df = pd.read_csv('/workspaces/gdp-dashboard-1/data/IOH-2.csv')
 #df1 = df.fillna(0)
 #df.columns
+L = df['University'].drop_duplicates()
+print(L)
 c1 = df['Palement'].sum()
 c2 = df['Minister'].sum()
 c3 = df['Bussiness'].sum()
