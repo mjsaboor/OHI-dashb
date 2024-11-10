@@ -176,3 +176,18 @@ with tabs[1]:
     plt.xlabel('Group')
     plt.ylabel('Age')
     st.pyplot(plt)
+
+    sns.set(style="whitegrid")
+
+    # Create the scatter plot
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(x='Age', y=dt.index, hue='Group', data=dt, palette={'Pro-shah': '#3A0CA3', 'Anti-shah': '#F72585'}, alpha=0.9)
+
+    # Add titles and labels
+    plt.title('Scatter Plot of Ages by Group')
+    plt.xlabel('Age')
+    plt.ylabel('Index')
+
+    # Show the plot
+    plt.legend(title='Group')
+    st.pyplot(plt)
